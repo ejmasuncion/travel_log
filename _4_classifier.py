@@ -37,20 +37,20 @@ class Classifier():
     def input_features(STA, NAT, PRC, ENT, BDK, OCT, LAT, LON, NON, OTF, BTK, SRK, CWA, DNA, TOP):
         data = {
             'stars': STA,
-            'nationality': NAT,
-            'price': PRC,
-            'ent_amenities': ENT,
-            'bedroom_keys': BDK,
-            'occupant': OCT,
             'latitude': LAT,
             'longitude': LON,
+            'Count_Walkable Attractions': CWA,
+            'Distance To Nearest Airport': DNA,
+            'nationality': NAT,
+            'occupant': OCT,
             'number_nights': NON,
-            'other_amenities': OTF,
+            'price': PRC,
+            'total_price': TOP,
+            'ent_amenities': ENT,
             'bathroom_keys': BTK,
+            'bedroom_keys': BDK,
             'security_keys': SRK,
-            'Count_Walkable_Attractions': CWA,
-            'Distance_To_Nearest_Airport': DNA,
-            'total_price': TOP
+            'other_amenities': OTF   
         }
         features = pd.DataFrame(data, index=[0])
         return features
