@@ -96,15 +96,15 @@ class Pages:
         with col1:
             st.write("1. Solo Traveler")  
             st.image("pictures/solo_traveler_icon_.svg", use_column_width=True,) 
-            st.image("pictures/solo_traveler_info.png", use_column_width=True) 
+            st.image("pictures/solo_traveler_info.PNG", use_column_width=True) 
         with col2:
             st.write("2. Low Budget Couple")
             st.image("pictures/low_budget_couple_iconv2_.svg", use_column_width=True,) 
-            st.image("pictures/low_budget_couple_info.png", use_column_width=True) 
+            st.image("pictures/low_budget_couple_info.PNG", use_column_width=True) 
         with col3:
             st.write("3. Mid Budget Couple")
             st.image("pictures/mid_budget_couple_icon_.svg", use_column_width=True,) 
-            st.image("pictures/mid_budget_couple_info.png", use_column_width=True) 
+            st.image("pictures/mid_budget_couple_info.PNG", use_column_width=True) 
 
         st.text("")
         st.text("")
@@ -115,11 +115,11 @@ class Pages:
         with col2:
             st.write("4. Mid Budget Family")
             st.image("pictures/mid_budget_family_icon_.svg", use_column_width=True,)
-            st.image("pictures/mid_budget_family_info.png", use_column_width=True) 
+            st.image("pictures/mid_budget_family_info.PNG", use_column_width=True) 
         with col3:
             st.write("5. High Budget Family")
             st.image("pictures/high_budget_family_icon_.svg", use_column_width=True,)
-            st.image("pictures/high_budget_family_info.png", use_column_width=True) 
+            st.image("pictures/high_budget_family_info.PNG", use_column_width=True) 
         with col4:
             pass
         
