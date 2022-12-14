@@ -60,8 +60,8 @@ class Classifier():
         model=pickle.load(sav_file)
         sav_file.close()
 
-        prediction = model.predict_proba(input_holdout)[:,1] >= 0.7
-        # prediction = model.predict(input_holdout)
+        # prediction = model.predict_proba(input_holdout)[:,1] >= 0.7
+        prediction = model.predict(input_holdout)
 
         if prediction[0] == 0:
             return ('Negative Experience')
