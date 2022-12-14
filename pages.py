@@ -75,7 +75,7 @@ class Pages:
         st.markdown("<h5 style='text-align: justify; font-size: 20px;color: lightgrey;'>The pandemic impacted the hotel industry, causing a decline in total bookings  and narrowing the gap between positive and negative reviews. Travel started to improve in Q3 2021, but did not fully recover to pre-pandemic levels.</h5>", unsafe_allow_html=True)
         st.markdown("""---""")
         st.markdown("<h2 style='text-align: center;color: lightgrey;'><strong>What can Travelog do?</strong></h2>", unsafe_allow_html=True)
-        st.markdown("<h5 style='text-align: justify; font-size: 20px;color: lightgrey;'>Travelog aims to aid Philippine tourism by helping hotel owners improve services to reach beyond international standards. It utilizes machine learning to provide hotel owners with insight on how to make a better experience for customers increase the expected review rating of customers by reallocating and maximizing the efficiency of the amenities, location, pricing, and other features of a hotel.</h5>", unsafe_allow_html=True)
+        st.markdown("<h5 style='text-align: justify; font-size: 20px;color: lightgrey;'>Travelog aims to aid Philippine tourism by helping hotel owners improve services to reach beyond international standards. It utilizes machine learning to provide hotel owners with insight on how to make a better experience for customers to increase the quality of their stay by reallocating and maximizing the efficiency of the amenities, location, pricing, and other features of a hotel.</h5>", unsafe_allow_html=True)
         st.markdown("""---""")
 
     def page_two():
@@ -180,21 +180,21 @@ class Pages:
             """
             <div class="card ">
                 <div class="card-content">
-                    <h1 style="font-size: 2em">7.55</h1>
+                    <h1 style="font-size: 2em">7.53</h1>
                     <p style="font-size: 0.8em">Average Review Rating</p>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-content">
-                    <h1 style="font-size: 2em">$2,000</h1>
-                    <p style="font-size: 0.8em">Average <br>Price</p>
+                    <h1 style="font-size: 2em">₱1,532</h1>
+                    <p style="font-size: 0.8em">Median<br>Price</p>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-content">
-                    <h1 style="font-size: 2em">4.5</h1>
+                    <h1 style="font-size: 2em">2.94</h1>
                     <p style="font-size: 0.8em">Average Star Rating</p>
                 </div>
             </div>
@@ -202,7 +202,7 @@ class Pages:
             <div class="card">
                 <div class="card-content">
                     <h1 style="font-size: 2em">304</h1>
-                    <p style="font-size: 0.8em">Total Hotels</p>
+                    <p style="font-size: 0.8em">Total <br> Manila Hotels</p>
                 </div>
             </div>
             """
@@ -243,10 +243,10 @@ class Pages:
             #g.annotate_subplot_text(fig,'Philippines',50.5,"45%",0,0,"x1","y1",bgcolor="grey",)
 
             new_order=[i.replace('Philippines', 'Local') for i in order]
-            cf.update_layout(fig,"Comparing Proportions",180,500,bgcolor="#2D3B6A",font_color="white",title_font_size=15,show_ygrid=False)
+            cf.update_layout(fig,"  Comparing Proportions",180,500,bgcolor="#2D3B6A",font_color="white",title_font_size=15,show_ygrid=False)
             cf.update_layout_order(fig,new_order)
             cf.update_layout_legend(fig,0.25,-0.15,orientation="h")
-            cf.update_layout_margin(fig,20,0,0,50)
+            cf.update_layout_margin(fig,40,0,0,50) 
             st.plotly_chart(fig, use_container_width=True)
 
             # Stacked Histplot (Compare Proportions)
@@ -333,7 +333,7 @@ class Pages:
 
 
 
-        df_for_mapping=pickle.load(open("data/df_for_mapping.pkl", "rb"))
+        
 
 
         map_column='Review_Rating'
@@ -353,13 +353,38 @@ class Pages:
         option = st.selectbox(
         'Select Filter For Map',
         ('Review_Rating', 'Price', 'Nearby_Attractions','Nearest_Resto_Bar','Nearest_Subway','Nearest_Airport',
-        "Nearest_Ocean","Total_Hotels"))
+        "Nearest_Ocean","Total_Hotels",
+
+        "Cluster 1-Solo Traveller","Cluster 2-Low Budget Couple","Cluster 3-Mid Budget Couple",
+        "Cluster 4-Mid Budget Family","Cluster 5-High Budget Family"
+        
+        ))
+
+        words = option.split()
+        first_word = words[0]
+        
+        if first_word=="Cluster":
+            option_="Review_Rating"
+            if option.split("-")[0]=="Cluster 1":
+                df_for_mapping=pickle.load(open("data/cluster_1.pkl", "rb"))
+            if option.split("-")[0]=="Cluster 2":
+                df_for_mapping=pickle.load(open("data/cluster_2.pkl", "rb"))
+            if option.split("-")[0]=="Cluster 3":
+                df_for_mapping=pickle.load(open("data/cluster_3.pkl", "rb"))
+            if option.split("-")[0]=="Cluster 4":
+                df_for_mapping=pickle.load(open("data/cluster_4.pkl", "rb"))
+            if option.split("-")[0]=="Cluster 5":
+                df_for_mapping=pickle.load(open("data/cluster_5.pkl", "rb"))
+
+        else:
+            option_=option
+            df_for_mapping=pickle.load(open("data/df_for_mapping.pkl", "rb"))
 
         fig = px.choropleth(df_for_mapping, 
                             locations = 'id', 
                             geojson = ncr_cities, 
                             #color = 'avg_price',
-                            color = option,
+                            color = option_,
                             hover_name = 'city',
                             color_continuous_scale=colorscale_,
 
@@ -372,7 +397,7 @@ class Pages:
 
         fig.update_geos(fitbounds = 'locations', visible = False)
 
-        #445899- light blue
+        #445899- light blue 
         #384C83- Best fit
         #deebf7 Light Grey
         #1e2746 Darker blue
