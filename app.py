@@ -5,17 +5,6 @@ from charts_functions_compiled import charts
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 
-col1, col2, col3 = st.columns([20,60,20], gap="large")
-with col1:
-    st.write(" ")
-with col2:
-    st.image("pictures/Larana.png", width=400)
-with col3:
-    st.write(" ")
-    
-st.markdown(" ")
-
-
 list_of_pages = [
     "Introduction",
     "Clusters",
@@ -25,7 +14,12 @@ list_of_pages = [
 
 # Left the inside blank so that it really looks like a navbar
 icons = ['building' , 'person','bar-chart-fill', 'gear']
-selection = option_menu("", list_of_pages, orientation='horizontal', icons=icons)
+selection = option_menu("", list_of_pages, orientation='horizontal', icons=icons,
+        styles={
+        "container": {"padding": "0!important", "background-color": "#448299"},
+        "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#AB5474"},  
+        "nav-link-selected": {"background-color": "#AB5474"},    
+        })
 
 if selection == "Introduction":
     Pages.page_one()
