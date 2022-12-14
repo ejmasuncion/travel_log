@@ -60,11 +60,13 @@ class Classifier():
         model=pickle.load(sav_file)
         sav_file.close()
 
-        prediction = model.predict_proba(input_holdout)[:,1] >= 0.7
+        prediction_probability=model.predict_proba(input_holdout)[:,1]
+        prediction = prediction_probability >= 0.7
         # prediction = model.predict(input_holdout)
 
+        st.write("Good Experience Prediction Probability: " + str(prediction_probability[0].round(4)*100) + "%")
         if prediction[0] == 0:
-            return ('Negative Experience')
+            return ("Based on our Thresold of 70%, our model isn't so sure that this guest will have positive experience.")
         else:
-            return('Positive Experience')
+            return('Based on our Thresold of 70%, our model thinks this guest will have a positive experience.')
                                                               

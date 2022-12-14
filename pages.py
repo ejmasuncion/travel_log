@@ -422,43 +422,57 @@ class Pages:
         st.title(
             "The Model"
         )
-        col1, col2 = st.columns([1,1])
+        col1, col2 = st.columns([0.5,0.5],gap="large")
 
         with col1:
-            st.markdown('Hotel Star Rating')
-            choice_star = st.number_input("Choose one", 1, 5)
-            st.markdown('Nationality')
-            choice_nationality = st.selectbox("Choose One", ['Filipino', 'Foreigner'])
-            st.markdown('Price')
-            choice_price = st.number_input("Input Price")
-            st.markdown('Entertainment Facilities')
-            choice_ent = st.multiselect('Pick all applicable', ['restaurant', 'bar', 'swimming pool', 'fitness room', 'spa & wellness centre', 'garden'])
-            st.markdown('Bedroom Amenities')
-            choice_bed = st.multiselect('Pick all applicable', ['air conditioning', 'tv', 'linens', 'flat-screen tv', 'cable channels', 'telephone', 'electric kettle', 
+            #st.markdown('Hotel Star Rating')
+            #Input Hotel Star Rating
+            choice_star = st.number_input("Input Hotel Star Rating", 1, 5)
+            #st.markdown('Nationality')
+            choice_nationality = st.selectbox("Input Nationality", ['Filipino', 'Foreigner'])
+            #st.markdown('Price')
+            choice_price = st.number_input("Hotel Budget")
+            #st.markdown('Entertainment Facilities')
+            choice_ent = st.multiselect('Entertainment Facilities-Pick all applicable', ['restaurant', 'bar', 'swimming pool', 'fitness room', 'spa & wellness centre', 'garden'])
+            #st.markdown('Bedroom Amenities')
+            choice_bed = st.multiselect('Bedroom Amenities-Pick all applicable', ['air conditioning', 'tv', 'linens', 'flat-screen tv', 'cable channels', 'telephone', 'electric kettle', 
                 'slippers', 'wardrobe or closet', 'clothes rack', 'socket near the bed', 'refrigerator', 
                 'satellite channels', 'terrace', 'soundproof rooms', 'safe'])
-            st.markdown('Hotel Services')
-            choice_ser = st.multiselect('Pick all applicable', ['airport shuttle', 'elevator', 'daily housekeeping', 'room service', 'baggage storage', 'laundry',
+            #st.markdown('Hotel Services')
+            choice_ser = st.multiselect('Hotel Services-Pick all applicable', ['airport shuttle', 'elevator', 'daily housekeeping', 'room service', 'baggage storage', 'laundry',
                 'upper floors accessible by elevator', 'wake-up service', 'concierge', 'facilities for disabled guests', 'ironing service'])
-            st.markdown('Number of Walkable Attractions')
-            choice_loc = st.number_input("Input Number of Destinations", 1, 50)
+            #st.markdown('Number of Walkable Attractions')
+            choice_loc = st.number_input("Number of Nearby Walkable Attractions (within 2km)", 1, 50)
             
         with col2:
-            st.markdown('Occupant Type')
-            choice_occupant = st.selectbox("Choose one", ["Solo Traveler", "Couple", "Family", "Group"])
-            st.markdown('City')
-            choice_city = st.text_input("Input City", placeholder= 'Manila City')
-            st.markdown('Number of Nights')
+            #st.markdown('Occupant Type')
+            choice_occupant = st.selectbox("Occupant Type-Choose one", ["Solo Traveler", "Couple", "Family", "Group"])
+            #st.markdown('City')
+            choice_city = st.selectbox("Select City", ['Pasay',
+                    'Quezon City',
+                    'Manila',
+                    'Makati',
+                    'Pasig',
+                    'Navotas',
+                    'Muntinlupa',
+                    'Parañaque',
+                    'Mandaluyong',
+                    'Taguig',
+                    'Las Piñas',
+                    'Marikina'])
+            #st.text_input("Input City", placeholder= 'Manila City')
+
+            #st.markdown('Number of Nights')
             choice_nights = st.number_input("Input Number of Nights", 1, 50)
-            st.markdown('Other Facilities')
-            choice_other = st.multiselect('Pick all applicable', ['free parking', 'non-smoking rooms', 'designated smoking area', 'desk', 'smoke-free property', 
+            #st.markdown('Other Facilities')
+            choice_other = st.multiselect('Other Facilities- Pick all applicable', ['free parking', 'non-smoking rooms', 'designated smoking area', 'desk', 'smoke-free property', 
                    'meeting/banquet facilities', 'family rooms', 'facilities for disabled guests', 'business center'])
-            st.markdown('Bathroom Amenities')
-            choice_bath = st.multiselect('Pick all applicable', ['private bathroom', 'toilet', 'towels', 'free toiletries', 'shower', 'toilet paper', 
+            #st.markdown('Bathroom Amenities')
+            choice_bath = st.multiselect('Bathroom Amenities-Pick all applicable', ['private bathroom', 'toilet', 'towels', 'free toiletries', 'shower', 'toilet paper', 
                  'bidet', 'hairdryer', 'bathtub or shower', 'bathrobe', 'hot tub/jacuzzi', 'dryer', 'raised toilet', 
                  'bathroom emergency cord'])
-            st.markdown('Distance to nearest Airport')
-            choice_airport = st.number_input("Input Distance")
+            #st.markdown('Distance to nearest Airport')
+            choice_airport = st.number_input("Input Distance to Nearest Airport (in km)")
             
         
         STA = int(choice_star)
@@ -482,6 +496,32 @@ class Pages:
 
         input_features = Classifier.input_features(STA, NAT, PRC, ENT, BDK, OCT, LAT, LON, NON, OTF, BTK, SRK, CWA, DNA, TOP)
         prediction = ''
+        
+        sav_file_reg = open('data/extra_trees_reg.sav', 'rb')
+        reg_model=pickle.load(sav_file_reg)
+        sav_file_reg.close()
+
+        reg_output_list=[STA,LAT, LON,CWA,DNA,OCT,NON,ENT,BTK,BDK,SRK,OTF]
+        df_input=pd.DataFrame(reg_output_list).T
+        df_input.columns=['stars',
+                            'latitude',
+                            'longitude',
+                            'Count_Walkable_Attractions',
+                            'Distance_To_Nearest_Airport',
+                            'occupant',
+                            'number_nights',
+                            'ent_amenities', 
+                            'bathroom_keys',
+                            'bedroom_keys',
+                            'security_keys',
+                            'other_amenities']
+
+
+
         if st.button('Submit'):
-            prediction = Classifier.model_fit(input_features)
-        st.write(prediction)
+            st.markdown("---")
+            prediction_class = Classifier.model_fit(input_features) 
+            prediction_reg = reg_model.predict(df_input)[0]
+            st.write(prediction_class)
+            st.write("Estimated Price/Valuation: ₱"+ prediction_reg.round(2).astype(str) + "   (RMSE: ₱563.77)")
+            #st.write(str(LAT)+" " +str(LON))
