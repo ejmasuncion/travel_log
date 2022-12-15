@@ -419,9 +419,7 @@ class Pages:
 
         
     def page_four():
-        st.title(
-            "The Model"
-        )
+        st.markdown("<h1 style='text-align: center; font-size: 28px;'>Customer Segmentation</h1>", unsafe_allow_html=True)
         col1, col2 = st.columns([0.5,0.5],gap="large")
 
         with col1:
